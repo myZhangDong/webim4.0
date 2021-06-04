@@ -1,13 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './i18n/index';
+import { Provider } from 'react-redux'
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { BrowserRouter, Route, HashRouter } from 'react-router-dom'
+import store from "./redux/index";
+import App from './App';
+import { createHashHistory } from 'history'
+const history = createHashHistory()
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider store={store}>
+    <HashRouter basename='/' history={history}>
+      <Route path={`/`} component={App}></Route>
+    </HashRouter>
+  </Provider>,
   document.getElementById('root')
 );
 

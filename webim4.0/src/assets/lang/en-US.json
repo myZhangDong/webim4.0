@@ -1,0 +1,21 @@
+{
+    "translation": {
+        "Welcome to React": "Welcome to React and react-i18next",
+        "signin": "SIGN IN",
+        "signup": "SIGN UP",
+        "username": "User Name",
+        "password": "Password",
+        "The user name or password cannot be empty": "The user name or password cannot be empty",
+        "Don't have an account": "Don't have an account?",
+        "Already have an account": "Already have an account",
+        "withdraw": "withdraw",
+        "You retracted a message": "You retracted a message",
+        "Add Friends": "Add Friends",
+        "User Id": "User Id",
+        "Read": "Read",
+        "Address Book": "Address Book",
+        "Create Group": "Create Group",
+        "Group": "Group",
+        "Chat Room": "Chat Room"
+    }
+}

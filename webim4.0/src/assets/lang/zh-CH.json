@@ -1,0 +1,21 @@
+{
+    "translation": {
+        "Welcome to React": "欢迎使用 React 和 react-i18next",
+        "signin": "登录",
+        "signup": "注册",
+        "username": "用户名",
+        "password": "密码",
+        "The user name or password cannot be empty": "用户名或密码不能为空",
+        "Don't have an account": "还没有账号？",
+        "Already have an account": "已有账号",
+        "withdraw": "撤回",
+        "You retracted a message": "你撤回了一条消息",
+        "Add Friends": "添加好友",
+        "User Id": "用户ID",
+        "Read": "已读",
+        "Address Book": "通讯录",
+        "Create Group": "创建群组",
+        "Group": "群组",
+        "Chat Room": "聊天室"
+    }
+}
