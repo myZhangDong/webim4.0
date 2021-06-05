@@ -4,6 +4,7 @@ import i18next from "i18next";
 import { Menu, MenuItem } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import { emoji } from '@/common/emoji'
+import { renderTime } from '@/utils'
 const useStyles = makeStyles((theme) => ({
     pulldownListItem: {
         display: 'flex',
@@ -60,7 +61,7 @@ function TextMessage({ message, onRecallMessage }) {
         handleClose()
     }
     const renderTxt = txt => {
-        if (txt == undefined) { return [] }
+        if (txt === undefined) { return [] }
         let rnTxt = []
         let match = null
         const regex = /(\[.*?\])/g
@@ -92,26 +93,29 @@ function TextMessage({ message, onRecallMessage }) {
     }
     return (
         <li className={classes.pulldownListItem}>
-            <Avatar>ss</Avatar>
+            <Avatar></Avatar>
             <div className={classes.textBody} onContextMenu={handleClick}>
                 {renderTxt(message.body.msg)}
             </div>
             <div className={classes.time}>
-                2020/12/21 12:54 Mon
+                {renderTime(message.time)}
             </div>
-            <Menu
-                keepMounted
-                open={state.mouseY !== null}
-                onClose={handleClose}
-                anchorReference="anchorPosition"
-                anchorPosition={
-                    state.mouseY !== null && state.mouseX !== null
-                        ? { top: state.mouseY, left: state.mouseX }
-                        : undefined
-                }
-            >
-                <MenuItem onClick={recallMessage}>{i18next.t("withdraw")}</MenuItem>
-            </Menu>
+            {message.bySelf ?
+                <Menu
+                    keepMounted
+                    open={state.mouseY !== null}
+                    onClose={handleClose}
+                    anchorReference="anchorPosition"
+                    anchorPosition={
+                        state.mouseY !== null && state.mouseX !== null
+                            ? { top: state.mouseY, left: state.mouseX }
+                            : undefined
+                    }
+                >
+                    <MenuItem onClick={recallMessage}>{i18next.t("withdraw")}</MenuItem>
+                </Menu> : null
+            }
+
         </li>
     )
 }

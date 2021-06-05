@@ -9,6 +9,8 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { useSelector, useDispatch } from 'react-redux'
 import { renderTime } from '@/utils'
+import groupIcon from '@/assets/images/group@2x.png'
+import chatRoomIcon from '@/assets/images/chatroom@2x.png'
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -88,7 +90,7 @@ export default function SessionList(props) {
     const { unread } = message
     const currentSession = useSelector(state => state.session.currentSession)
     let currentSessionIndex = 0
-
+    console.log('******&&&&&& sessionList', sessionList)
     const renderSessionList = sessionList.asMutable({ deep: true })
         .map((session) => {
             const chatMsgs = message?.[session.sessionType][session.sessionId] || []
@@ -119,6 +121,13 @@ export default function SessionList(props) {
     return (
         <List dense className={classes.root}>
             {renderSessionList.map((session, index) => {
+                let avatarSrc = ''
+                if (session.sessionType === 'groupChat') {
+                    avatarSrc = groupIcon
+                }
+                else if (session.sessionType === 'chatRoom') {
+                    avatarSrc = chatRoomIcon
+                }
                 return (
                     <ListItem key={session.sessionId}
                         selected={currentSessionIndex === index}
@@ -128,8 +137,8 @@ export default function SessionList(props) {
                             <ListItemAvatar>
                                 <Avatar
                                     className={classes.avatar}
-                                    alt={`Avatar n°${session.sessionId + 1}`}
-                                    src={`/static/images/avatar/${session.sessionId + 1}.jpg`}
+                                    alt={`session.sessionId`}
+                                    src={avatarSrc}
                                 />
                             </ListItemAvatar>
                             <Box className={classes.itemRightBox}>

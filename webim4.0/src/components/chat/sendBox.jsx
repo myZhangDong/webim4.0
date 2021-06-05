@@ -6,6 +6,7 @@ import Emoji from './toolbars/emoji'
 import { useSelector, useDispatch } from 'react-redux';
 import MessageActions from '@/redux/message'
 import { useParams } from "react-router-dom";
+import WebIM from '@/common/WebIM'
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
@@ -36,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
         height: theme.spacing(12),
         width: theme.spacing(12),
         cursor: 'pointer'
+    },
+    hide: {
+        display: 'none'
     }
 }));
 
@@ -46,10 +50,12 @@ function SendBox() {
     let { chatType, to } = useParams();
     console.log('** Render SendBox **')
     const emojiRef = useRef(null)
+    const fileEl = useRef(null)
     const [emojiVisible, setEmojiVisible] = useState(null)
     const [inputValue, setInputValue] = useState('')
     const inputRef = useRef(null)
     const inputValueRef = useRef(null)
+    const imageEl = useRef(null)
     inputValueRef.current = inputValue
     const handleClickEmoji = (e) => {
         setEmojiVisible(e.currentTarget)
@@ -99,14 +105,57 @@ function SendBox() {
         };
     }, [onKeyDownEvent])
 
+    const handleFileClick = () => {
+        fileEl.current.focus()
+        fileEl.current.click()
+    }
+    const handleImageClick = () => {
+        imageEl.current.focus()
+        imageEl.current.click()
+    }
+    const handleFileChange = (e) => {
+        let file = WebIM.utils.getFileUrl(e.target)
+        console.log(file)
+        if (!file.filename) {
+            return false
+        }
+        dispatch(MessageActions.sendFileMessage(to, chatType, file))
+    }
+    const handleImageChange = (e) => {
+        let file = WebIM.utils.getFileUrl(e.target)
+        console.log(file)
+        if (!file.filename) {
+            return false
+        }
+    }
     return (
         <Box className={classes.root}>
             <Box className={classes.toolbar}>
                 <IconButton ref={emojiRef} className="iconfont icon-biaoqing icon" onClick={handleClickEmoji}></IconButton>
 
                 <IconButton className="iconfont icon-luyin icon"></IconButton>
-                <IconButton className="iconfont icon-tupian icon"></IconButton>
-                <IconButton className="iconfont icon-wenjianfujian icon"></IconButton>
+                <IconButton className="iconfont icon-tupian icon"
+                    onClick={handleImageClick}
+                >
+                    <input
+                        type="file"
+                        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
+                        ref={imageEl}
+                        onChange={handleImageChange}
+                        className={classes.hide}
+                    />
+                </IconButton>
+                <IconButton className="iconfont icon-wenjianfujian icon"
+                    onClick={handleFileClick}
+                >
+                    <input
+                        ref={fileEl}
+                        onChange={handleFileChange}
+                        type="file"
+                        className={classes.hide}
+                    />
+                </IconButton>
+
             </Box>
             <Box className={classes.emitter}>
                 <textarea className={classes.input}

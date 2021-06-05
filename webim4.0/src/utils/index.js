@@ -74,7 +74,8 @@ const msgTpl = {
         height: 0,
         url: '',
         thumb: '',
-        thumb_secret: ''
+        thumb_secret: '',
+        size: ''
     },
     video: {
         type: 'video',
@@ -133,6 +134,8 @@ export function formatServerMessage(message = {}, messageType) {
     const body = Object.assign(msgTpl[messageType], message)
     let chatType = message.type
     if (chatType === 'chat') chatType = 'singleChat';
+    if (chatType === 'groupchat') chatType = 'groupChat'
+    if (chatType === 'chatroom') chatType = 'chatRoom'
     if (messageType === 'txt') {
         body.msg = message.data;
         body.type = 'txt'
@@ -158,3 +161,11 @@ export function renderTime(time) {
     return localFormat
 }
 
+export function getGroupName(str) {
+    const [name, id] = str.split("_#-#_")
+    return name
+}
+export function getGroupId(str) {
+    const [name, id] = str.split("_#-#_")
+    return id
+}

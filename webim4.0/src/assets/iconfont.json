@@ -6,18 +6,74 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "21907855",
-      "name": "未读消息",
-      "font_class": "weiduxiaoxi",
+      "icon_id": "22055078",
+      "name": "黑名单",
+      "font_class": "heimingdan",
       "unicode": "e7f4",
       "unicode_decimal": 59380
     },
     {
-      "icon_id": "21907856",
-      "name": "已读消息",
-      "font_class": "yiduxiaoxi",
+      "icon_id": "22055079",
+      "name": "禁言 2",
+      "font_class": "jinyan2",
       "unicode": "e7f5",
       "unicode_decimal": 59381
+    },
+    {
+      "icon_id": "22055080",
+      "name": "设置管理员",
+      "font_class": "shezhiguanliyuan",
+      "unicode": "e7f9",
+      "unicode_decimal": 59385
+    },
+    {
+      "icon_id": "22055081",
+      "name": "无禁言状态",
+      "font_class": "wujinyanzhuangtai",
+      "unicode": "e7fa",
+      "unicode_decimal": 59386
+    },
+    {
+      "icon_id": "22055082",
+      "name": "删除",
+      "font_class": "shanchu",
+      "unicode": "e7fb",
+      "unicode_decimal": 59387
+    },
+    {
+      "icon_id": "22055083",
+      "name": "群好友",
+      "font_class": "qunhaoyou",
+      "unicode": "e7fc",
+      "unicode_decimal": 59388
+    },
+    {
+      "icon_id": "21996443",
+      "name": "未发送成功",
+      "font_class": "weifasongchenggong",
+      "unicode": "e7ef",
+      "unicode_decimal": 59375
+    },
+    {
+      "icon_id": "21996444",
+      "name": "已读消息",
+      "font_class": "yiduxiaoxi1",
+      "unicode": "e7f6",
+      "unicode_decimal": 59382
+    },
+    {
+      "icon_id": "21996446",
+      "name": "未读消息",
+      "font_class": "weiduxiaoxi1",
+      "unicode": "e7f7",
+      "unicode_decimal": 59383
+    },
+    {
+      "icon_id": "21996448",
+      "name": "添加",
+      "font_class": "tianjia1",
+      "unicode": "e7f8",
+      "unicode_decimal": 59384
     },
     {
       "icon_id": "21864893",
@@ -116,13 +172,6 @@
       "font_class": "qunliao",
       "unicode": "e7dc",
       "unicode_decimal": 59356
-    },
-    {
-      "icon_id": "21794289",
-      "name": "添加",
-      "font_class": "tianjia",
-      "unicode": "e7dd",
-      "unicode_decimal": 59357
     },
     {
       "icon_id": "21794290",

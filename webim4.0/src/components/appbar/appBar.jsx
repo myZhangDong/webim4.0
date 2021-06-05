@@ -15,8 +15,9 @@ import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import { useParams } from "react-router-dom";
 import { Menu, MenuItem } from '@material-ui/core';
 import i18next from "i18next";
-import AddFriendDialog from '@/components/appbar/addFriend'
-import AddressBookDialog from '@/components/appbar/addressBook'
+import AddFriendDialog from '@/components/appbar/addFriend/addFriend'
+import AddressBookDialog from '@/components/appbar/addressBook/addressBook'
+import AddGroupDialog from '@/components/appbar/addGroup/addGroup'
 const useStyles = makeStyles((theme) => {
     return ({
         root: {
@@ -61,11 +62,10 @@ const useStyles = makeStyles((theme) => {
             marginLeft: '14px'
         },
 
-
         menuItemIconBox: {
             marginRight: '5px',
             '& span': {
-                color: 'rgba(97, 255, 69, 1)',
+                color: '#00BA6E',
                 fontWeight: 'bold'
             }
         }
@@ -82,6 +82,7 @@ function ProminentAppBar(props) {
 
     const [showAddFriend, setShowAddFriend] = useState(false) // show AddFriendDialog
     const [showAddressBook, setShowAddressBook] = useState(false) // show AddressBookDisalod
+    const [showAddGroup, setShowAddGroup] = useState(false) // show AddGroupDialog
     const handleClickAdd = (e) => {
         setAddEl(e.currentTarget)
     }
@@ -128,6 +129,14 @@ function ProminentAppBar(props) {
                         {i18next.t('Add Friends')}
                     </Typography>
                 </MenuItem>
+                <MenuItem onClick={addGroup}>
+                    <Box className={classes.menuItemIconBox}>
+                        <Icon className="iconfont icon-qunhaoyou"></Icon>
+                    </Box>
+                    <Typography variant="inherit" noWrap>
+                        {i18next.t('Add Groups')}
+                    </Typography>
+                </MenuItem>
             </Menu>
         )
     }
@@ -147,6 +156,14 @@ function ProminentAppBar(props) {
         setShowAddFriend(false)
     }
 
+    // ------- 4th Add menu item -------
+    function addGroup() {
+        setShowAddGroup(true)
+    }
+    function handleAddGroupClose() {
+        setShowAddGroup(false)
+    }
+
 
     /*********** first icon button: Setting ***********/
     function renderSettingMenu() {
@@ -163,7 +180,7 @@ function ProminentAppBar(props) {
                         <Icon className="iconfont icon-gerenziliao"></Icon>
                     </Box>
                     <Typography variant="inherit" noWrap>
-                        Personal Data
+                        {i18next.t('Personal Data')}
                     </Typography>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
@@ -171,7 +188,7 @@ function ProminentAppBar(props) {
                         <Icon className="iconfont icon-shezhi"></Icon>
                     </Box>
                     <Typography variant="inherit" noWrap>
-                        Set Up
+                        {i18next.t('Settings')}
                     </Typography>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
@@ -179,7 +196,7 @@ function ProminentAppBar(props) {
                         <Icon className="iconfont icon-tuichu"></Icon>
                     </Box>
                     <Typography variant="inherit" noWrap>
-                        Sign Out
+                        {i18next.t('Log Out')}
                     </Typography>
                 </MenuItem>
             </Menu>
@@ -200,7 +217,7 @@ function ProminentAppBar(props) {
                         <Icon className="iconfont icon-huihuaxinxi"></Icon>
                     </Box>
                     <Typography variant="inherit" noWrap>
-                        Session Info
+                        {i18next.t('Session Info')}
                     </Typography>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
@@ -208,7 +225,7 @@ function ProminentAppBar(props) {
                         <Icon className="iconfont icon-qingkongxiaoxi"></Icon>
                     </Box>
                     <Typography variant="inherit" noWrap>
-                        Clear Message
+                        {i18next.t('Clear Message')}
                     </Typography>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
@@ -216,7 +233,7 @@ function ProminentAppBar(props) {
                         <Icon className="iconfont icon-shanchuhuihua"></Icon>
                     </Box>
                     <Typography variant="inherit" noWrap>
-                        Delete Session
+                        {i18next.t('Delete Session')}
                     </Typography>
                 </MenuItem>
             </Menu>
@@ -230,7 +247,7 @@ function ProminentAppBar(props) {
                 <Toolbar className={classes.toolbar}>
                     <IconButton
                         onClick={handleClickAdd}
-                        className="iconfont icon-tianjia icon"
+                        className="iconfont icon-tianjia1 icon"
                     ></IconButton>
                     <IconButton
                         onClick={handleClickSetting}
@@ -268,6 +285,11 @@ function ProminentAppBar(props) {
                 {...props}
                 open={showAddressBook}
                 onClose={handleAddressBookDialogClose} />
+            <AddGroupDialog
+                {...props}
+                open={showAddGroup}
+                onClose={handleAddGroupClose}
+            />
         </div>
     );
 }

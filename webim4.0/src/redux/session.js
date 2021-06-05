@@ -8,7 +8,7 @@ import AppDB from '@/utils/AppDB';
 const { Types, Creators } = createActions({
     setSessionList: ['sessionList'],
     setCurrentSession: ['userId'],
-    topSession: ['sessionId'],
+    topSession: ['sessionId', 'sessionType'],
     getSessionList: () => {
         return (dispatch, getState) => {
             AppDB.getSessionList().then((res) => {
@@ -33,9 +33,9 @@ export const setCurrentSession = (state, { userId }) => {
     return state.merge({ currentSession: userId })
 }
 
-export const topSession = (state, { sessionId }) => {
+export const topSession = (state, { sessionId, sessionType }) => {
     const sessionList = state.getIn(['sessionList'], Immutable([])).asMutable()
-    let topSession
+    let topSession = { sessionId, sessionType }
     sessionList.forEach((element, index) => {
         if (sessionId === element.sessionId) {
             topSession = element;

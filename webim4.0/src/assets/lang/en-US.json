@@ -11,11 +11,19 @@
         "withdraw": "withdraw",
         "You retracted a message": "You retracted a message",
         "Add Friends": "Add Friends",
+        "Add Groups": "Add Groups",
         "User Id": "User Id",
         "Read": "Read",
         "Address Book": "Address Book",
         "Create Group": "Create Group",
         "Group": "Group",
-        "Chat Room": "Chat Room"
+        "Chat Room": "Chat Room",
+        "Group Id": "Group Id",
+        "Personal Data": "Personal Data",
+        "Settings": "Settings",
+        "Log Out": "Log Out",
+        "Session Info": "Session Info",
+        "Clear Message": "Clear Message",
+        "Delete Session": "Delete Session"
     }
 }

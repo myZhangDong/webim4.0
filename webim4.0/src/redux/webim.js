@@ -32,8 +32,13 @@ WebIM.conn.listen({
         console.log("onTextMessage", message)
         const { type, from, to } = message
         const sessionId = type === 'chat' ? from : to
+        const sessionType = {
+            chat: 'singleChat',
+            groupchat: 'groupChat',
+            chatroom: 'chatRoom'
+        }
         store.dispatch(MessageActions.addMessage(message, 'txt'))
-        store.dispatch(SessionActions.topSession(sessionId))
+        store.dispatch(SessionActions.topSession(sessionId, sessionType[type]))
     },
 
     onError: (err) => {

@@ -1,8 +1,10 @@
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import clsx from 'clsx';
-import { IconButton, Icon } from '@material-ui/core';
+import i18next from "i18next";
+import { IconButton, Icon, Menu, MenuItem } from '@material-ui/core';
+import { renderTime } from '../../../utils';
 const useStyles = makeStyles((theme) => ({
     pulldownListItem: {
         padding: '10px 0',
@@ -67,18 +69,29 @@ const useStyles = makeStyles((theme) => ({
         width: '100%'
     }
 }))
-
-function FileMessage() {
+const initialState = {
+    mouseX: null,
+    mouseY: null,
+};
+function FileMessage({ message, onRecallMessage }) {
     const classes = useStyles({ bySelf: true });
+    const [state, setState] = useState(initialState);
+    const handleClose = () => {
+        setState(initialState);
+    };
+    const recallMessage = () => {
+        onRecallMessage(message)
+        handleClose()
+    }
     return (
         <li className={classes.pulldownListItem}>
-            <Avatar>ss</Avatar>
+            <Avatar></Avatar>
             <div className={classes.fileCard}>
                 <div className={classes.fileIcon}>
                     <Icon className={clsx(classes.icon, 'iconfont icon-fujian')}></Icon>
                 </div>
                 <div className={classes.fileInfo}>
-                    <p>file name ddddddddddd</p>
+                    <p>{message.filename}</p>
                     <span>file size</span>
                 </div>
                 <div className={classes.download}>
@@ -86,8 +99,23 @@ function FileMessage() {
                 </div>
             </div>
             <div className={classes.time}>
-                2020/12/21 12:54 Mon
+                {renderTime(message.time)}
             </div>
+            {message.bySelf ?
+                <Menu
+                    keepMounted
+                    open={state.mouseY !== null}
+                    onClose={handleClose}
+                    anchorReference="anchorPosition"
+                    anchorPosition={
+                        state.mouseY !== null && state.mouseX !== null
+                            ? { top: state.mouseY, left: state.mouseX }
+                            : undefined
+                    }
+                >
+                    <MenuItem onClick={recallMessage}>{i18next.t("withdraw")}</MenuItem>
+                </Menu> : null
+            }
         </li>
 
     )

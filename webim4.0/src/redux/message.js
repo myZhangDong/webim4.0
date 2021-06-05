@@ -53,6 +53,45 @@ const { Types, Creators } = createActions({
         }
     },
 
+    sendFileMessage: (to, chatType, file) => {
+        return (dispatch, getState) => {
+            let pMessage = null
+            const formatMsg = formatLocalMessage(to, chatType, file, 'file')
+            const { body, id } = formatMsg
+            // const id = WebIM.conn.getUniqueId()
+            const type = 'file'
+            const msgObj = new WebIM.message('file', id)
+            debugger
+            msgObj.set({
+                ext: {
+                    file_length: file.data.size,
+                    file_type: file.data.type
+                },
+                file: file,
+                to,
+                chatType,
+                onFileUploadError: function (error) {
+                    console.log(error)
+                    // dispatch(Creators.updateMessageStatus(pMessage, "fail"))
+                    formatMsg.status = 'fail'
+                    dispatch(Creators.updateMessageStatus(formatMsg, 'fail'))
+                },
+                onFileUploadComplete: function (data) {
+                    let url = data.uri + '/' + data.entities[0].uuid
+                    formatMsg.url = url
+                    formatMsg.status = 'sent'
+                    dispatch(Creators.updateMessageStatus(formatMsg, 'sent'))
+                },
+                fail: function () {
+                    dispatch(Creators.updateMessageStatus(formatMsg, 'fail'))
+                },
+            })
+
+            WebIM.conn.send(msgObj.body)
+            dispatch(Creators.addMessage(formatMsg, 'file'))
+        }
+    },
+
     recallMessage: (to, chatType, message) => {
         return (dispatch, getState) => {
             const { id } = message
@@ -81,9 +120,9 @@ const { Types, Creators } = createActions({
 /* ------------- Reducers ------------- */
 export const addMessage = (state, { message, messageType = 'txt' }) => {
     const rootState = store.getState()
-    console.log('******* rootState ****', rootState)
+    // console.log('******* rootState ****', message)
     !message.status && (message = formatServerMessage(message, messageType)) //remote messages do not have a status field
-    // console.log('格式化的消息', message, rootState)
+    console.log('格式化的消息', message)
     const username = WebIM.conn.context.userId//_.get(state, 'login.username', '')
     const { id, to, status } = message
     let { chatType } = message
@@ -140,8 +179,10 @@ export const addMessage = (state, { message, messageType = 'txt' }) => {
     state = state.setIn([chatType, chatId], chatData)
 
     // unread
-    const activeContact = _.get(state, ['session', 'currentSession'])
-    if (!bySelf && !isPushed && message.from !== activeContact) {
+    const currentSession = _.get(rootState, ['session', 'currentSession'])
+    const addSingleChatUnread = !bySelf && !isPushed && message.from !== currentSession && (chatType === 'singleChat' || chatType === 'strager')
+    const addGroupUnread = !bySelf && !isPushed && message.to !== currentSession && (chatType === 'groupChat' || chatType === 'chatRoom')
+    if (addSingleChatUnread || addGroupUnread) {
         let count = state.getIn(['unread', chatType, chatId], 0)
         state = state.setIn(['unread', chatType, chatId], ++count)
     }
