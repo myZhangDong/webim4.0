@@ -127,6 +127,7 @@ function SendBox() {
         if (!file.filename) {
             return false
         }
+        dispatch(MessageActions.sendImgMessage(to, chatType, file))
     }
     return (
         <Box className={classes.root}>

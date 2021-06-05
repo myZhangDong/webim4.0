@@ -4,7 +4,7 @@ import Avatar from '@material-ui/core/Avatar';
 import clsx from 'clsx';
 import i18next from "i18next";
 import { IconButton, Icon, Menu, MenuItem } from '@material-ui/core';
-import { renderTime } from '../../../utils';
+import { renderTime } from '@/utils';
 const useStyles = makeStyles((theme) => ({
     pulldownListItem: {
         padding: '10px 0',

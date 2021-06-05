@@ -1,14 +1,17 @@
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
+import { Avatar, Menu, MenuItem } from '@material-ui/core';
 import agora from '@/assets/images/agora@2x.png'
+import i18next from "i18next";
+import { renderTime } from '@/utils';
 const useStyles = makeStyles((theme) => ({
     pulldownListItem: {
         padding: '10px 0',
         listStyle: 'none',
         marginBottom: '26px',
         position: 'relative',
-        display: 'flex'
+        display: 'flex',
+        flexDirection: props => props.bySelf ? 'row-reverse' : 'row'
     },
     imgBox: {
         marginLeft: '10px',
@@ -28,18 +31,51 @@ const useStyles = makeStyles((theme) => ({
         width: '100%'
     }
 }))
-
-function ImgMessage() {
-    const classes = useStyles({ bySelf: true });
+const initialState = {
+    mouseX: null,
+    mouseY: null,
+};
+function ImgMessage({ message, onRecallMessage }) {
+    const classes = useStyles({ bySelf: message.bySelf });
+    const [state, setState] = useState(initialState);
+    const handleClose = () => {
+        setState(initialState);
+    };
+    const recallMessage = () => {
+        onRecallMessage(message)
+        handleClose()
+    }
+    const handleClick = (event) => {
+        event.preventDefault();
+        setState({
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+        });
+    };
     return (
         <li className={classes.pulldownListItem}>
-            <Avatar>ss</Avatar>
-            <div className={classes.imgBox}>
-                <img src={agora} alt='img message'></img>
+            <Avatar></Avatar>
+            <div className={classes.imgBox} onContextMenu={handleClick}>
+                <img src={message.url} alt='img message'></img>
             </div>
             <div className={classes.time}>
-                2020/12/21 12:54 Mon
+                {renderTime(message.time)}
             </div>
+            {message.bySelf ?
+                <Menu
+                    keepMounted
+                    open={state.mouseY !== null}
+                    onClose={handleClose}
+                    anchorReference="anchorPosition"
+                    anchorPosition={
+                        state.mouseY !== null && state.mouseX !== null
+                            ? { top: state.mouseY, left: state.mouseX }
+                            : undefined
+                    }
+                >
+                    <MenuItem onClick={recallMessage}>{i18next.t("withdraw")}</MenuItem>
+                </Menu> : null
+            }
         </li>
     )
 }

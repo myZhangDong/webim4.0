@@ -28,7 +28,6 @@ WebIM.conn.listen({
         store.dispatch(SessionActions.getSessionList())
         // get roster
         store.dispatch(RosterActions.getContacts())
-
         // store.dispatch(CommonActions.setLoading(false))
     },
 
@@ -44,10 +43,17 @@ WebIM.conn.listen({
         const { type, from, to } = message
         const sessionId = type === 'chat' ? from : to
         store.dispatch(MessageActions.addMessage(message, 'file'))
-        store.dispatch(SessionActions.topSession(sessionId, sessionType[type]))
+
         // type === 'chat' && store.dispatch(MessageActions.sendRead(message))
     },
-
+    onPictureMessage: message => {
+        console.log('onPictureMessage', message)
+        const { type, from, to } = message
+        const sessionId = type === 'chat' ? from : to
+        store.dispatch(MessageActions.addMessage(message, 'img'))
+        // type === 'chat' && store.dispatch(MessageActions.sendRead(message))
+        store.dispatch(SessionActions.topSession(sessionId, sessionType[type]))
+    },
     onError: (err) => {
         console.error(err)
     },

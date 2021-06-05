@@ -55,13 +55,9 @@ const { Types, Creators } = createActions({
 
     sendFileMessage: (to, chatType, file) => {
         return (dispatch, getState) => {
-            let pMessage = null
             const formatMsg = formatLocalMessage(to, chatType, file, 'file')
-            const { body, id } = formatMsg
-            // const id = WebIM.conn.getUniqueId()
-            const type = 'file'
+            const { id } = formatMsg
             const msgObj = new WebIM.message('file', id)
-            debugger
             msgObj.set({
                 ext: {
                     file_length: file.data.size,
@@ -89,6 +85,40 @@ const { Types, Creators } = createActions({
 
             WebIM.conn.send(msgObj.body)
             dispatch(Creators.addMessage(formatMsg, 'file'))
+        }
+    },
+
+    sendImgMessage: (to, chatType, file) => {
+        return (dispatch, getState) => {
+            const formatMsg = formatLocalMessage(to, chatType, file, 'img')
+            const { id } = formatMsg
+            const msgObj = new WebIM.message('img', id)
+            msgObj.set({
+                ext: {
+                    file_length: file.data.size,
+                    file_type: file.data.type
+                },
+                file: file,
+                to,
+                chatType,
+                onFileUploadError: function (error) {
+                    // dispatch(Creators.updateMessageStatus(pMessage, "fail"))
+                    formatMsg.status = 'fail'
+                    dispatch(Creators.updateMessageStatus(formatMsg, 'fail'))
+                },
+                onFileUploadComplete: function (data) {
+                    let url = data.uri + '/' + data.entities[0].uuid
+                    formatMsg.url = url
+                    formatMsg.status = 'sent'
+                    dispatch(Creators.addMessage(formatMsg, 'img'))
+                    dispatch(Creators.updateMessageStatus(formatMsg, 'sent'))
+                },
+                fail: function () {
+                    dispatch(Creators.updateMessageStatus(formatMsg, 'fail'))
+                },
+            })
+            WebIM.conn.send(msgObj.body)
+            dispatch(Creators.addMessage(formatMsg, 'img'))
         }
     },
 
