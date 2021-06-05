@@ -81,7 +81,7 @@ function MessageList({ messageList }) {
                             return <TextMessage message={msg} key={msg.id} onRecallMessage={handleRecallMsg} />
                         }
                         else if (msg.body.type === 'file') {
-                            return <FileMessage message={msg} key={msg.id} />
+                            return <FileMessage message={msg} key={msg.id} onRecallMessage={handleRecallMsg} />
                         }
                         else if (msg.body.type === 'img') {
                             return <ImgMessage message={msg} key={msg.id} />

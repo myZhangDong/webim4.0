@@ -11,7 +11,8 @@ const useStyles = makeStyles((theme) => ({
         listStyle: 'none',
         marginBottom: '26px',
         position: 'relative',
-        display: 'flex'
+        display: 'flex',
+        flexDirection: props => props.bySelf ? 'row-reverse' : 'row'
     },
     fileCard: {
         width: '252px',
@@ -74,7 +75,7 @@ const initialState = {
     mouseY: null,
 };
 function FileMessage({ message, onRecallMessage }) {
-    const classes = useStyles({ bySelf: true });
+    const classes = useStyles({ bySelf: message.bySelf });
     const [state, setState] = useState(initialState);
     const handleClose = () => {
         setState(initialState);
@@ -83,19 +84,28 @@ function FileMessage({ message, onRecallMessage }) {
         onRecallMessage(message)
         handleClose()
     }
+    const handleClick = (event) => {
+        event.preventDefault();
+        setState({
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+        });
+    };
     return (
         <li className={classes.pulldownListItem}>
             <Avatar></Avatar>
-            <div className={classes.fileCard}>
+            <div className={classes.fileCard} onContextMenu={handleClick}>
                 <div className={classes.fileIcon}>
                     <Icon className={clsx(classes.icon, 'iconfont icon-fujian')}></Icon>
                 </div>
                 <div className={classes.fileInfo}>
                     <p>{message.filename}</p>
-                    <span>file size</span>
+                    <span>{Math.floor(message.body.size / 1024) + 'kb'}</span>
                 </div>
                 <div className={classes.download}>
-                    <IconButton className="iconfont icon-xiazai"></IconButton>
+                    <a href={message.body.url} download={message.filename}>
+                        <IconButton className="iconfont icon-xiazai"></IconButton>
+                    </a>
                 </div>
             </div>
             <div className={classes.time}>

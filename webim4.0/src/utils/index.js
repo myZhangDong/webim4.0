@@ -114,6 +114,9 @@ export function formatLocalMessage(to, chatType, message = {}, messageType) {
     const ext = message.ext || {}
     const formatMsg = Object.assign(msgTpl.base, message)
     const body = Object.assign(msgTpl[messageType], message)
+    if (messageType === 'file' || messageType === 'img') {
+        body.size = message?.data.size
+    }
     return {
         ...formatMsg,
         id: WebIM.conn.getUniqueId(),
@@ -139,6 +142,9 @@ export function formatServerMessage(message = {}, messageType) {
     if (messageType === 'txt') {
         body.msg = message.data;
         body.type = 'txt'
+    } else if (messageType === 'file') {
+        body.type = 'file'
+        body.size = body.file_length
     }
     return {
         ...formatMsg,

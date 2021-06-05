@@ -7,7 +7,11 @@ import CommonActions from '@/redux/common'
 import MessageActions from '@/redux/message'
 import RosterActions from "@/redux/roster"
 import SessionActions from "@/redux/session"
-
+const sessionType = {
+    chat: 'singleChat',
+    groupchat: 'groupChat',
+    chatroom: 'chatRoom'
+}
 WebIM.conn.listen({
     // success connect
     onOpened: msg => {
@@ -32,13 +36,16 @@ WebIM.conn.listen({
         console.log("onTextMessage", message)
         const { type, from, to } = message
         const sessionId = type === 'chat' ? from : to
-        const sessionType = {
-            chat: 'singleChat',
-            groupchat: 'groupChat',
-            chatroom: 'chatRoom'
-        }
         store.dispatch(MessageActions.addMessage(message, 'txt'))
         store.dispatch(SessionActions.topSession(sessionId, sessionType[type]))
+    },
+    onFileMessage: message => {
+        console.log("onFileMessage", message)
+        const { type, from, to } = message
+        const sessionId = type === 'chat' ? from : to
+        store.dispatch(MessageActions.addMessage(message, 'file'))
+        store.dispatch(SessionActions.topSession(sessionId, sessionType[type]))
+        // type === 'chat' && store.dispatch(MessageActions.sendRead(message))
     },
 
     onError: (err) => {
