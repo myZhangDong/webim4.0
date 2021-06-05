@@ -1,6 +1,7 @@
 import React, { memo } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import i18next from "i18next";
+import { renderTime } from '@/utils';
 const useStyles = makeStyles((theme) => ({
     pulldownListItem: {
         padding: '10px 0',
@@ -26,15 +27,15 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-function RetractedMessage() {
-    const classes = useStyles({ bySelf: true });
+function RetractedMessage({ message }) {
+    const classes = useStyles({ bySelf: message.bySelf });
     return (
         <li className={classes.pulldownListItem}>
             <div className={classes.text}>
-                {i18next.t('You retracted a message')}
+                {message.bySelf ? i18next.t('You retracted a message') : message.from + i18next.t('retracted a message')}
             </div>
             <div className={classes.time}>
-                2020/12/21 12:54 Mon
+                {renderTime(message.time)}
             </div>
         </li>
     )

@@ -54,6 +54,11 @@ WebIM.conn.listen({
         // type === 'chat' && store.dispatch(MessageActions.sendRead(message))
         store.dispatch(SessionActions.topSession(sessionId, sessionType[type]))
     },
+
+    onRecallMessage: message => {
+        console.log('onRecallMessage', message)
+        store.dispatch(MessageActions.deleteMessage(message))
+    },
     onError: (err) => {
         console.error(err)
     },
