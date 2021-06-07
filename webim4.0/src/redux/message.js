@@ -160,6 +160,13 @@ const { Types, Creators } = createActions({
             })
         }
     },
+
+    clearMessage: (chatType, id) => {
+        return (dispatch) => {
+            dispatch({ 'type': 'CLEAR_MESSAGE', 'chatType': chatType, 'id': id })
+            AppDB.clearMessage(chatType, id).then(res => { })
+        }
+    },
 })
 
 /* ------------- Reducers ------------- */
@@ -295,13 +302,18 @@ export const fetchMessage = (state, { to, chatType, messages, offset }) => {
     return state.setIn([chatType, to], data)
 }
 
+export const clearMessage = (state, { chatType, id }) => {
+    return chatType ? state.setIn([chatType, id], []) : state
+}
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const messageReducer = createReducer(INITIAL_STATE, {
     [Types.ADD_MESSAGE]: addMessage,
     [Types.DELETE_MESSAGE]: deleteMessage,
     [Types.CLEAR_UNREAD]: clearUnread,
-    [Types.FETCH_MESSAGE]: fetchMessage
+    [Types.FETCH_MESSAGE]: fetchMessage,
+    [Types.CLEAR_MESSAGE]: clearMessage,
 })
 
 export default Creators
