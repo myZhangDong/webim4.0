@@ -95,6 +95,11 @@ const { Types, Creators } = createActions({
             })
         }
     },
+    createGroup: (options) => {
+        return (dispatch, getState) => {
+            WebIM.conn.createGroupNew(options)
+        }
+    }
 })
 
 /*---------------- reducer ------------------*/

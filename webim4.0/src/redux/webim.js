@@ -30,7 +30,7 @@ WebIM.conn.listen({
         store.dispatch(SessionActions.getSessionList())
         // get roster
         store.dispatch(RosterActions.getContacts())
-        store.dispatch(GroupActions.getGroup())
+        store.dispatch(GroupActions.getGroups())
         // store.dispatch(CommonActions.setLoading(false))
     },
 

@@ -17,6 +17,7 @@ import i18next from "i18next";
 import AddFriendDialog from '@/components/appbar/addFriend/addFriend'
 import AddressBookDialog from '@/components/appbar/addressBook/addressBook'
 import AddGroupDialog from '@/components/appbar/addGroup/addGroup'
+import CreateGroupDialog from '@/components/appbar/createGroup/createGroup'
 import CommonActions from '@/redux/common'
 import GroupActions from '@/redux/group'
 import { useSelector, useDispatch } from 'react-redux'
@@ -117,7 +118,7 @@ const useStyles = makeStyles((theme) => {
 });
 
 function ProminentAppBar(props) {
-    const classes = useStyles(props);
+    const classes = useStyles();
     const dispatch = useDispatch()
     const { to, chatType } = useParams()
     const groupById = useSelector(state => state.group.group.byId) || {}
@@ -128,6 +129,7 @@ function ProminentAppBar(props) {
 
     const [showAddFriend, setShowAddFriend] = useState(false) // show AddFriendDialog
     const [showAddressBook, setShowAddressBook] = useState(false) // show AddressBookDisalod
+    const [showCreateGroup, setShowCreateGroup] = useState(false)
     const [showAddGroup, setShowAddGroup] = useState(false) // show AddGroupDialog
     const handleClickAdd = (e) => {
         setAddEl(e.currentTarget)
@@ -159,7 +161,7 @@ function ProminentAppBar(props) {
                         {i18next.t('Address Book')}
                     </Typography>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={createGroup}>
                     <Box className={classes.menuItemIconBox}>
                         <Icon className="iconfont icon-chuangjianqunzu"></Icon>
                     </Box>
@@ -194,6 +196,13 @@ function ProminentAppBar(props) {
         setShowAddressBook(false)
     }
 
+    // ------- 2th Add menu item -------
+    function createGroup() {
+        setShowCreateGroup(true)
+    }
+    function handleCreateGroupClose() {
+        setShowCreateGroup(false)
+    }
     // ------- 3th Add menu item -------
     function addFriend() {
         setShowAddFriend(true)
@@ -356,6 +365,11 @@ function ProminentAppBar(props) {
                 {...props}
                 open={showAddGroup}
                 onClose={handleAddGroupClose}
+            />
+            <CreateGroupDialog
+                {...props}
+                open={showCreateGroup}
+                onClose={handleCreateGroupClose}
             />
         </div>
     );

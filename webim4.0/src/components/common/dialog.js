@@ -63,14 +63,7 @@ export default function AlertDialogSlide({ open, title, content, onClose, footer
                     {content}
                 </DialogContent>
                 {
-                    footer ? <DialogActions>
-                        <Button onClick={onClose} color="primary">
-                            Disagree
-                    </Button>
-                        <Button onClick={onClose} color="primary">
-                            Agree
-                    </Button>
-                    </DialogActions> : null
+                    footer ? footer : null
                 }
             </Dialog>
         </div>
