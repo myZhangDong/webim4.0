@@ -23,6 +23,8 @@ import GroupActions from '@/redux/group'
 import MessageActions from '@/redux/message'
 import SessionActions from '@/redux/session'
 import { useSelector, useDispatch } from 'react-redux'
+import UserInfoDialog from '@/components/appbar/userInfo/index'
+import UserSettingDialog from '@/components/appbar/userSetting/index'
 const useStyles = makeStyles((theme) => {
     return ({
         root: {
@@ -133,6 +135,8 @@ function ProminentAppBar(props) {
     const [showAddressBook, setShowAddressBook] = useState(false) // show AddressBookDisalod
     const [showCreateGroup, setShowCreateGroup] = useState(false)
     const [showAddGroup, setShowAddGroup] = useState(false) // show AddGroupDialog
+    const [showUserInfo,setShowUserInfo] = useState(false) // show UserInfoDialog
+    const [showUserSetting,setShowUserSetting] = useState(false) // show UserSetting
     const handleClickAdd = (e) => {
         setAddEl(e.currentTarget)
     }
@@ -232,7 +236,7 @@ function ProminentAppBar(props) {
                 open={Boolean(settingEl)}
                 onClose={() => setSettingEl(null)}
             >
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={()=>setShowUserInfo(true)}>
                     <Box className={classes.menuItemIconBox}>
                         <Icon className="iconfont icon-gerenziliao"></Icon>
                     </Box>
@@ -240,7 +244,7 @@ function ProminentAppBar(props) {
                         {i18next.t('Personal Data')}
                     </Typography>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={()=>setShowUserSetting(true)}>
                     <Box className={classes.menuItemIconBox}>
                         <Icon className="iconfont icon-shezhi"></Icon>
                     </Box>
@@ -379,6 +383,15 @@ function ProminentAppBar(props) {
                 {...props}
                 open={showCreateGroup}
                 onClose={handleCreateGroupClose}
+            />
+
+            <UserInfoDialog
+                open={showUserInfo}
+                onClose={()=> setShowUserInfo(false)}
+            />
+            <UserSettingDialog
+                open={showUserSetting}
+                onClose={()=>setShowUserSetting(false)}
             />
         </div>
     );
