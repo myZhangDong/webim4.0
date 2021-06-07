@@ -9,6 +9,7 @@ const { Types, Creators } = createActions({
     setSessionList: ['sessionList'],
     setCurrentSession: ['userId'],
     topSession: ['sessionId', 'sessionType'],
+    deleteSession: ['sessionId'],
     getSessionList: () => {
         return (dispatch, getState) => {
             AppDB.getSessionList().then((res) => {
@@ -46,9 +47,18 @@ export const topSession = (state, { sessionId, sessionType }) => {
     return state.merge({ sessionList })
 }
 
+export const deleteSession = (state, { sessionId }) => {
+    let sessionList = state.sessionList.asMutable()
+    sessionList = sessionList.filter((item) => {
+        return item.sessionId !== sessionId
+    })
+    return state.setIn(['sessionList'], sessionList)
+}
+
 /* ------------- Hookup Reducers To Types ------------- */
 export const sessionReducer = createReducer(INITIAL_STATE, {
     [Types.SET_SESSION_LIST]: setSessionList,
     [Types.SET_CURRENT_SESSION]: setCurrentSession,
-    [Types.TOP_SESSION]: topSession
+    [Types.TOP_SESSION]: topSession,
+    [Types.DELETE_SESSION]: deleteSession
 })

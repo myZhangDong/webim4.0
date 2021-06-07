@@ -21,6 +21,7 @@ import CreateGroupDialog from '@/components/appbar/createGroup/createGroup'
 import CommonActions from '@/redux/common'
 import GroupActions from '@/redux/group'
 import MessageActions from '@/redux/message'
+import SessionActions from '@/redux/session'
 import { useSelector, useDispatch } from 'react-redux'
 const useStyles = makeStyles((theme) => {
     return ({
@@ -284,7 +285,7 @@ function ProminentAppBar(props) {
                         {i18next.t('Clear Message')}
                     </Typography>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleClickDeleteSession}>
                     <Box className={classes.menuItemIconBox}>
                         <Icon className="iconfont icon-shanchuhuihua"></Icon>
                     </Box>
@@ -305,6 +306,10 @@ function ProminentAppBar(props) {
     }
     const handleClickClearMessage = () => {
         dispatch(MessageActions.clearMessage(chatType, to))
+    }
+    const handleClickDeleteSession = () => {
+        dispatch(MessageActions.clearMessage(chatType, to))
+        dispatch(SessionActions.deleteSession(to))
     }
     return (
         <div className={classes.root}>
