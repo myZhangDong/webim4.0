@@ -8,6 +8,8 @@ const { Types, Creators } = createActions({
     updateGroup: ['groups'],
     dissolveGroup: ['group'],
     updateGroupInfo: ['info'],
+    getGroupInfo: ['groupInfo'],
+    updateGroupMemberInfo: ['groupId', 'memberInfo'],
     getGroups: () => {
         return (dispatch, getState) => {
             dispatch(CommonActions.setLoading(true))
@@ -34,6 +36,7 @@ const { Types, Creators } = createActions({
             })
         }
     },
+    // modify group name
     updateGroupInfoAsync: info => {
         return (dispatch, getState) => {
             WebIM.conn.modifyGroup({
@@ -46,6 +49,49 @@ const { Types, Creators } = createActions({
                 },
                 error: e => {
                 }
+            })
+        }
+    },
+    getGroupInfoAsync: groupId => {
+        return (dispatch, getState) => {
+            WebIM.conn.getGroupInfo({
+                groupId: groupId,
+                success: response => {
+                    let data = response.data[0]
+                    let groupMember = data.affiliations || []
+                    let groupMemberIds = []
+                    groupMember.forEach(member => {
+                        if (member.owner) {
+                            member.role = 'owner'
+                            member.id = member.owner
+                            groupMemberIds.push(member.owner)
+                        } else if (member.admin) {
+                            member.role = 'admin'
+                            member.id = member.role
+                            groupMemberIds.push(member.admin)
+                        } else {
+                            member.role = 'member'
+                            member.id = member.member
+                            groupMemberIds.push(member.member)
+                        }
+                    });
+                    let info = {
+                        ...data,
+                        affiliations: groupMember,
+                        groupMemberIds
+                    }
+                    dispatch(Creators.getGroupInfo(info))
+                    dispatch(Creators.getGroupMemberInfo(groupId, groupMemberIds))
+                },
+            })
+        }
+    },
+    getGroupMemberInfo: (groupId, ids) => {
+        return (dispatch, getState) => {
+            WebIM.conn.fetchUserInfoById(ids).then((res) => {
+                console.log(res)
+                let infos = res.data
+                dispatch(Creators.updateGroupMemberInfo(groupId, infos))
             })
         }
     },
@@ -87,10 +133,17 @@ export const updateGroupInfo = (state, { info }) => {
     names.splice(names.indexOf(oldName), 1, newName)
     return state.setIn(['byId', info.groupId, 'groupName'], info.groupName).set('names', names.sort())
 }
+
+export const getGroupInfo = (state, { groupInfo }) => {
+    return state.setIn(['byId', groupInfo.id, 'info'], groupInfo)
+}
+
+export const updateGroupMemberInfo = (state, { groupId, memberInfo }) => {
+    return state.setIn(['byId', groupId, 'memberInfo'], memberInfo)
+}
 /* ------------- Initial State ------------- */
 
 export const INITIAL_STATE = Immutable({
-    groupMember: [],
     byId: {},
     names: []
 })
@@ -101,6 +154,8 @@ export const reducer = createReducer(INITIAL_STATE, {
     [Types.UPDATE_GROUP]: updateGroup,
     [Types.UPDATE_GROUP_INFO]: updateGroupInfo,
     [Types.DISSOLVE_GROUP]: dissolveGroup,
+    [Types.GET_GROUP_INFO]: getGroupInfo,
+    [Types.UPDATE_GROUP_MEMBER_INFO]: updateGroupMemberInfo
 })
 
 

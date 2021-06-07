@@ -25,6 +25,13 @@
         "Log Out": "Log Out",
         "Session Info": "Session Info",
         "Clear Message": "Clear Message",
-        "Delete Session": "Delete Session"
+        "Delete Session": "Delete Session",
+        "setAdmin": "Set as admin",
+        "removeAdmin": "Rmove admin",
+        "mute": "Mute",
+        "muted": "Muted",
+        "groupBlockSingle": "Block member to group blacklist",
+        "removeSingleGroupMember": "Remove member from group",
+        "Numbers": "Numbers"
     }
 }

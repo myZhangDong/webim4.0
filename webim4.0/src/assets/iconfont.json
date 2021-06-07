@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "22062641",
+      "name": "管理员",
+      "font_class": "guanliyuan",
+      "unicode": "e7fd",
+      "unicode_decimal": 59389
+    },
+    {
       "icon_id": "22055078",
       "name": "黑名单",
       "font_class": "heimingdan",

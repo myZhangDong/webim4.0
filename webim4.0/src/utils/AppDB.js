@@ -40,7 +40,7 @@ const AppDB = {
     },
 
     // get lastest mumber of message by start index
-    fetchMessage(userId, chatType = 'chat', offset = 0, limit = PAGE_NUM) {
+    fetchMessage(userId, chatType = 'singleChat', offset = 0, limit = PAGE_NUM) {
         const $_TABLE = this.$_TABLE
         return this.exec(resolve => {
             $_TABLE.where('chatType')
@@ -49,7 +49,7 @@ const AppDB = {
                     if (item.error) {
                         return false
                     }
-                    if (chatType === 'chat') {
+                    if (chatType === 'singleChat') {
                         return item.from === userId || item.to === userId
                     } else {
                         return item.to === userId
@@ -175,6 +175,22 @@ const AppDB = {
                             })
                         }
                     });
+                    if (!sessionObj.Abigail) {
+                        sessionList.push({
+                            sessionType: 'singleChat',
+                            sessionId: 'Abigail'
+                        })
+                    }
+                    if (!sessionObj.Isabella) {
+                        sessionList.push({
+                            sessionType: 'singleChat',
+                            sessionId: 'Isabella'
+                        })
+                    }
+                    sessionList.push({
+                        sessionType: 'notice',
+                        sessionId: 'notice'
+                    })
                     resolve(sessionList)
                 })
         })

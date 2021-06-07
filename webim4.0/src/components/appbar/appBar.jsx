@@ -1,16 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
+import { IconButton, Icon, InputBase } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, fade } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import agora from '@/assets/images/agora@2x.png'
-import { Icon, ListItemIcon } from '@material-ui/core';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import { useParams } from "react-router-dom";
 import { Menu, MenuItem } from '@material-ui/core';
@@ -18,6 +17,9 @@ import i18next from "i18next";
 import AddFriendDialog from '@/components/appbar/addFriend/addFriend'
 import AddressBookDialog from '@/components/appbar/addressBook/addressBook'
 import AddGroupDialog from '@/components/appbar/addGroup/addGroup'
+import CommonActions from '@/redux/common'
+import GroupActions from '@/redux/group'
+import { useSelector, useDispatch } from 'react-redux'
 const useStyles = makeStyles((theme) => {
     return ({
         root: {
@@ -68,13 +70,57 @@ const useStyles = makeStyles((theme) => {
                 color: '#00BA6E',
                 fontWeight: 'bold'
             }
-        }
+        },
+
+        search: {
+            position: 'relative',
+            borderRadius: '15px',
+            backgroundColor: fade(theme.palette.common.white, 0.15),
+            '&:hover': {
+                backgroundColor: fade(theme.palette.common.white, 0.25),
+            },
+            marginLeft: 0,
+            width: '100%',
+            [theme.breakpoints.up('sm')]: {
+                marginLeft: theme.spacing(1),
+                width: 'auto',
+            },
+        },
+        searchIcon: {
+            padding: theme.spacing(0, 2),
+            height: '100%',
+            position: 'absolute',
+            pointerEvents: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        inputRoot: {
+            color: 'inherit',
+        },
+        inputInput: {
+            padding: theme.spacing(1, 1, 1, 0),
+            // vertical padding + font size from searchIcon
+            paddingLeft: `30px`,
+            transition: theme.transitions.create('width'),
+            width: '100%',
+            [theme.breakpoints.up('sm')]: {
+                width: '0',
+                '&:focus': {
+                    width: '20ch',
+                },
+            },
+        },
+
+
     })
 });
 
 function ProminentAppBar(props) {
     const classes = useStyles(props);
-    const { to } = useParams()
+    const dispatch = useDispatch()
+    const { to, chatType } = useParams()
+    const groupById = useSelector(state => state.group.group.byId) || {}
     const { onGoBack, showLeft, showRight, isSmallScreen } = props
     const [settingEl, setSettingEl] = useState(null)
     const [addEl, setAddEl] = useState(null)
@@ -212,7 +258,7 @@ function ProminentAppBar(props) {
                 open={Boolean(sessionEl)}
                 onClose={() => setSessionEl(null)}
             >
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleClickSessionInfo}>
                     <Box className={classes.menuItemIconBox}>
                         <Icon className="iconfont icon-huihuaxinxi"></Icon>
                     </Box>
@@ -238,6 +284,14 @@ function ProminentAppBar(props) {
                 </MenuItem>
             </Menu>
         )
+    }
+    const handleClickSessionInfo = () => {
+        if (chatType === 'groupChat') {
+            if (!groupById[to]?.info) {
+                dispatch(GroupActions.getGroupInfoAsync(to))
+            }
+        }
+        dispatch(CommonActions.setShowDrawer(true))
     }
     return (
         <div className={classes.root}>
@@ -268,7 +322,20 @@ function ProminentAppBar(props) {
                     {to}
                 </Typography>
                 <Toolbar className={classes.toolbar}>
-                    <IconButton className="iconfont icon-sousuo icon"></IconButton>
+                    {/* <IconButton className="iconfont icon-sousuo icon"></IconButton> */}
+                    <div className={classes.search}>
+                        <div className={classes.searchIcon}>
+                            <IconButton className="iconfont icon-sousuo icon"></IconButton>
+                        </div>
+                        <InputBase
+                            placeholder=""
+                            classes={{
+                                root: classes.inputRoot,
+                                input: classes.inputInput,
+                            }}
+                            inputProps={{ 'aria-label': 'search' }}
+                        />
+                    </div>
                     <IconButton
                         onClick={handleSessionInfoClick}
                         className="iconfont icon-hanbaobao icon"

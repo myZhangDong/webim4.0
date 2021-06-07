@@ -5,16 +5,16 @@ import WebIM from '@/common/WebIM';
 
 const { Types, Creators } = createActions({
     setGroupMember: ['groupId', 'members'],
-
     getGroupMember: groupId => {
         return (dispatch, getState) => {
-            WebIM.conn.queryRoomMember({
-                roomId: groupId,
-                success: function (members) {
-                    dispatch(Creators.setGroupMember(groupId, members))
-                },
-                error: function () { }
-            })
+            // 废弃接口
+            // WebIM.conn.queryRoomMember({
+            //     roomId: groupId,
+            //     success: function (members) {
+            //         dispatch(Creators.setGroupMember(groupId, members))
+            //     },
+            //     error: function () { }
+            // })
         }
     },
     joinGroup: options => {

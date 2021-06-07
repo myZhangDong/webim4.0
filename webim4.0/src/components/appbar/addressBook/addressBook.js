@@ -161,7 +161,6 @@ export default function AddressBookDialog(props) {
                                         className={classes.avatar}
                                         alt={`${userId}`}
                                     >
-                                        {userId}
                                     </Avatar>
                                 </ListItemAvatar>
                                 <Box>

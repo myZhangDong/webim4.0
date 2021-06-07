@@ -7,6 +7,8 @@ import CommonActions from '@/redux/common'
 import MessageActions from '@/redux/message'
 import RosterActions from "@/redux/roster"
 import SessionActions from "@/redux/session"
+import GroupActions from '@/redux/group'
+import NoticeActions from '@/redux/notice'
 const sessionType = {
     chat: 'singleChat',
     groupchat: 'groupChat',
@@ -28,6 +30,7 @@ WebIM.conn.listen({
         store.dispatch(SessionActions.getSessionList())
         // get roster
         store.dispatch(RosterActions.getContacts())
+        store.dispatch(GroupActions.getGroup())
         // store.dispatch(CommonActions.setLoading(false))
     },
 
@@ -58,6 +61,24 @@ WebIM.conn.listen({
     onRecallMessage: message => {
         console.log('onRecallMessage', message)
         store.dispatch(MessageActions.deleteMessage(message))
+    },
+
+    onContactInvited: function (msg) {
+        store.dispatch(NoticeActions.addFriendRequest(msg))
+    },
+    onContactDeleted: function () { },
+    onContactAdded: function () { },
+    onContactRefuse: function () { },
+    onContactAgreed: function () { },
+
+    onPresence: msg => {
+        switch (msg.type) {
+            case 'joinGroupNotifications':
+                store.dispatch(NoticeActions.addGroupRequest(msg))
+                break;
+            default:
+                break
+        }
     },
     onError: (err) => {
         console.error(err)

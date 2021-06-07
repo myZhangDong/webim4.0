@@ -145,6 +145,21 @@ const { Types, Creators } = createActions({
             AppDB.readMessage(chatType, sessionId)
         }
     },
+    fetchMessage: (to, chatType, offset, cb) => {
+        return (dispatch) => {
+            AppDB.fetchMessage(to, chatType, offset).then(res => {
+                if (res.length) {
+                    dispatch({
+                        'type': 'FETCH_MESSAGE',
+                        'chatType': chatType,
+                        'to': to,
+                        'messages': res
+                    })
+                }
+                cb && cb(res.length)
+            })
+        }
+    },
 })
 
 /* ------------- Reducers ------------- */
@@ -273,12 +288,20 @@ export const clearUnread = (state, { chatType, sessionId }) => {
     return state.setIn(['unread', chatType], data)
 }
 
+export const fetchMessage = (state, { to, chatType, messages, offset }) => {
+    let data = state[chatType] && state[chatType][to] ? state[chatType][to].asMutable() : []
+    data = messages.concat(data)
+    //-----------------------
+    return state.setIn([chatType, to], data)
+}
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const messageReducer = createReducer(INITIAL_STATE, {
     [Types.ADD_MESSAGE]: addMessage,
     [Types.DELETE_MESSAGE]: deleteMessage,
-    [Types.CLEAR_UNREAD]: clearUnread
+    [Types.CLEAR_UNREAD]: clearUnread,
+    [Types.FETCH_MESSAGE]: fetchMessage
 })
 
 export default Creators

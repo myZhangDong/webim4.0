@@ -9,6 +9,7 @@ import { sessionReducer } from './session'
 import { reducer as groupMemberReducer } from './groupMember'
 import { reducer as groupReducer } from './group'
 import { reducer as chatRoomReducer } from './chatRoom'
+import { reducer as noticeReducer } from './notice'
 import './webim'
 const logger = createLogger(); // initialize logger
 const rootReducer = combineReducers({
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
         groupMember: groupMemberReducer,
         group: groupReducer
     }),
-    chatRoom: chatRoomReducer
+    chatRoom: chatRoomReducer,
+    notice: noticeReducer
 })
 const middlewares = [thunk, logger]
 const enhancers = []
