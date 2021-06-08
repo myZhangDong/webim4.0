@@ -22,7 +22,13 @@ import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import { withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+const BaseInput = withStyles({
+    "root": {
+        color: 'red',
+    },
+})(TextField);
 
 function Login(props) {
     // console.log('login 刷新了', history)
@@ -81,7 +87,8 @@ function Login(props) {
                         <img src={agora} alt='agora' />
                     </Box>
                     <form className={classes.form} >
-                        <TextField
+                        <BaseInput
+                            inputProps={{ className: classes.input }}
                             margin="normal"
                             required
                             value={values.userName}
@@ -105,6 +112,7 @@ function Login(props) {
                         <FormControl className={classes.password}>
                             <InputLabel htmlFor="standard-adornment-password">{i18next.t('password')}</InputLabel>
                             <Input
+                                className={classes.input}
                                 id="standard-adornment-password"
                                 type={values.showPassword ? 'text' : 'password'}
                                 value={values.password}

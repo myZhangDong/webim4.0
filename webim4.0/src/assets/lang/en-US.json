@@ -32,6 +32,7 @@
         "muted": "Muted",
         "groupBlockSingle": "Block member to group blacklist",
         "removeSingleGroupMember": "Remove member from group",
-        "Numbers": "Numbers"
+        "Numbers": "Numbers",
+        "nickname": "nickname"
     }
 }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CommonDialog from "@/components/common/dialog";
 import i18next from "i18next";
-import { Box} from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useStore } from "react-redux";
@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => {
       flexDirection: "column",
       alignItems: "center",
       minWidth: "300px",
+      minHeight: theme.spacing(30),
       paddingBottom: theme.spacing(4),
       margin: "16px 24px",
     },
@@ -25,12 +26,8 @@ const useStyles = makeStyles((theme) => {
 
 export default function Setting({ open, onClose }) {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const [inputValue, setInputValue] = useState("");
-  const [error, setError] = useState();
 
   const handleClose = () => {
-    setError(null);
     onClose();
   };
   function renderContent() {
@@ -39,12 +36,12 @@ export default function Setting({ open, onClose }) {
         <Grid container spacing={5}>
           <Grid item xs={12} className={classes.gridItem}>
             <Typography variant="inherit" noWrap>
-              {i18next.t("UserSetting-about")}: test
+              {i18next.t("UserSetting-about")}: webim
             </Typography>
           </Grid>
           <Grid item xs={12} className={classes.gridItem}>
             <Typography variant="inherit" noWrap>
-              sdk:{"test2"}
+              sdk:{"3.5.2"}
             </Typography>
           </Grid>
         </Grid>

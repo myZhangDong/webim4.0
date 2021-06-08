@@ -3,10 +3,13 @@ import Immutable from 'seamless-immutable'
 import WebIM from "../common/WebIM";
 import Cookie from 'js-cookie'
 import CommonActions from '@/redux/common'
+import { history } from '@/common/routes'
+import { message } from '@/components/common/Alert'
 /* ------------- Types and Action Creators ------------- */
 const { Types, Creators } = createActions({
     setLoginInfo: ['username', 'password', 'token'],
     setLoading: ['fetching'],
+    setUserInfo: ['info'],
     // async
     login: (username, password) => {
         return (dispatch, getState) => {
@@ -36,7 +39,63 @@ const { Types, Creators } = createActions({
                 appKey: WebIM.config.appkey
             })
         }
-    }
+    },
+
+    getUserInfo: id => {
+        return (dispatch, getState) => {
+            WebIM.conn.fetchUserInfoById(id).then((res) => {
+                dispatch(Creators.setUserInfo(res.data[id]))
+            })
+        }
+    },
+
+    updateOwnInfo: (key, value) => {
+        return (dispatch, getState) => {
+            WebIM.conn.updateOwnUserInfo(key, value).then((res) => {
+                dispatch(Creators.setUserInfo(res.data))
+            })
+        }
+    },
+
+    logout: () => {
+        return (dispatch, state) => {
+            WebIM.conn.close('logout')
+            history.push('/login')
+        }
+    },
+
+    register: (username, password, nickname) => {
+        return (dispatch, getState) => {
+            let options = {
+                username: username.trim().toLowerCase(),
+                password: password,
+                nickname: nickname || username,
+                success: function () {
+                    message.success('注册成功')
+                    history.push('/login')
+                },
+
+                error: (err) => {
+                    if (JSON.parse(err.data).error === 'duplicate_unique_property_exists') {
+
+                    } else if (JSON.parse(err.data).error === 'illegal_argument') {
+                        if (JSON.parse(err.data).error_description === 'USERNAME_TOO_LONG') {
+                            return message.error('用户名超过64个字节！')
+                        } else if (JSON.parse(err.data).error_description === 'password or pin must provided') {
+                            return message.error('密码不合法！')
+                        }
+                        message.error('用户名不合法！')
+                    } else if (JSON.parse(err.data).error === 'unauthorized') {
+                        message.error('注册失败，无权限！')
+                    } else if (JSON.parse(err.data).error === 'resource_limited') {
+                        message.error('您的App用户注册数量已达上限,请升级至企业版！')
+                    }
+                }
+            }
+            // dispatch(Creators.registerRequest(username, password, nickname))
+            WebIM.conn.registerUser(options)
+        }
+    },
 })
 
 const INITIAL_STATE = {
@@ -44,7 +103,8 @@ const INITIAL_STATE = {
     password: null,
     token: null,
     fetching: false,
-    isLogin: false
+    isLogin: false,
+    info: null
 }
 /* ------------- Reducers ------------- */
 export const setLoginInfo = (state = INITIAL_STATE, { username, password, token }) => {
@@ -61,9 +121,14 @@ export const setLoading = (state = INITIAL_STATE, { fetching }) => {
     })
 }
 
+export const setUserInfo = (state, { info }) => {
+    return state.setIn(['info'], info)
+}
+
 export const loginReducer = createReducer(INITIAL_STATE, {
     [Types.SET_LOGIN_INFO]: setLoginInfo,
-    [Types.SET_LOADING]: setLoading
+    [Types.SET_LOADING]: setLoading,
+    [Types.SET_USER_INFO]: setUserInfo
 })
 
 export default Creators

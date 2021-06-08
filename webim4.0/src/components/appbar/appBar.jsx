@@ -22,9 +22,11 @@ import CommonActions from '@/redux/common'
 import GroupActions from '@/redux/group'
 import MessageActions from '@/redux/message'
 import SessionActions from '@/redux/session'
+import LoginActions from '@/redux/login'
 import { useSelector, useDispatch } from 'react-redux'
 import UserInfoDialog from '@/components/appbar/userInfo/index'
 import UserSettingDialog from '@/components/appbar/userSetting/index'
+import WebIM from '@/common/WebIM';
 const useStyles = makeStyles((theme) => {
     return ({
         root: {
@@ -135,8 +137,9 @@ function ProminentAppBar(props) {
     const [showAddressBook, setShowAddressBook] = useState(false) // show AddressBookDisalod
     const [showCreateGroup, setShowCreateGroup] = useState(false)
     const [showAddGroup, setShowAddGroup] = useState(false) // show AddGroupDialog
-    const [showUserInfo,setShowUserInfo] = useState(false) // show UserInfoDialog
-    const [showUserSetting,setShowUserSetting] = useState(false) // show UserSetting
+    const [showUserInfo, setShowUserInfo] = useState(false) // show UserInfoDialog
+    const [showUserSetting, setShowUserSetting] = useState(false) // show UserSetting
+    const ownInfo = useSelector(state => state.login.info)
     const handleClickAdd = (e) => {
         setAddEl(e.currentTarget)
     }
@@ -236,7 +239,7 @@ function ProminentAppBar(props) {
                 open={Boolean(settingEl)}
                 onClose={() => setSettingEl(null)}
             >
-                <MenuItem onClick={()=>setShowUserInfo(true)}>
+                <MenuItem onClick={handleInfoClick}>
                     <Box className={classes.menuItemIconBox}>
                         <Icon className="iconfont icon-gerenziliao"></Icon>
                     </Box>
@@ -244,7 +247,7 @@ function ProminentAppBar(props) {
                         {i18next.t('Personal Data')}
                     </Typography>
                 </MenuItem>
-                <MenuItem onClick={()=>setShowUserSetting(true)}>
+                <MenuItem onClick={() => setShowUserSetting(true)}>
                     <Box className={classes.menuItemIconBox}>
                         <Icon className="iconfont icon-shezhi"></Icon>
                     </Box>
@@ -252,7 +255,7 @@ function ProminentAppBar(props) {
                         {i18next.t('Settings')}
                     </Typography>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleLogout}>
                     <Box className={classes.menuItemIconBox}>
                         <Icon className="iconfont icon-tuichu"></Icon>
                     </Box>
@@ -262,6 +265,17 @@ function ProminentAppBar(props) {
                 </MenuItem>
             </Menu>
         )
+    }
+
+    const handleInfoClick = () => {
+        setShowUserInfo(true)
+        if (!ownInfo) {
+            dispatch(LoginActions.getUserInfo(WebIM.conn.context.userId))
+        }
+    }
+
+    const handleLogout = () => {
+        dispatch(LoginActions.logout())
     }
 
     function renderSessionInfoMenu() {
@@ -387,11 +401,11 @@ function ProminentAppBar(props) {
 
             <UserInfoDialog
                 open={showUserInfo}
-                onClose={()=> setShowUserInfo(false)}
+                onClose={() => setShowUserInfo(false)}
             />
             <UserSettingDialog
                 open={showUserSetting}
-                onClose={()=>setShowUserSetting(false)}
+                onClose={() => setShowUserSetting(false)}
             />
         </div>
     );

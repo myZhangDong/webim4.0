@@ -5,7 +5,7 @@ import { Box, TextField, Button } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useStore } from 'react-redux'
-import RosterActions from '@/redux/roster'
+import GroupActions from '@/redux/group'
 import { message } from '@/components/common/Alert'
 const useStyles = makeStyles((theme) => {
     return ({
@@ -38,7 +38,7 @@ export default function AddGroupDialog({ open, onClose }) {
         if (!inputValue) {
             return setError(true)
         }
-        dispatch(RosterActions.addContact(inputValue))
+        dispatch(GroupActions.joinGroup(inputValue))
         message.success(i18next.t('Successfully send the application'))
         setInputValue('')
         setError(null)

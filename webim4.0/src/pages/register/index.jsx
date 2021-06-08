@@ -64,15 +64,11 @@ function Register(props) {
         if (!values.userName || !values.password) {
             return message.error(i18next.t('The user name or password cannot be empty'))
         }
-
-        // dispatch(LoginActions.login(userName, password))
-        // props.login(userName, password)
+        dispatch(LoginActions.register(values.userName, values.password))
         // props.setLoading(true)
     }
     return (
         <div className={classes.container} >
-
-
             <Box className={classes.bannerBox} style={{ display: showBanner ? 'flex' : 'none' }}>
                 <Box></Box>
             </Box>
@@ -83,6 +79,7 @@ function Register(props) {
                     </Box>
                     <form className={classes.form} >
                         <TextField
+                            inputProps={{ className: classes.input }}
                             margin="normal"
                             required
                             value={values.userName}
@@ -106,6 +103,7 @@ function Register(props) {
                         <FormControl className={classes.password}>
                             <InputLabel htmlFor="standard-adornment-password">{i18next.t('password')}</InputLabel>
                             <Input
+                                className={classes.input}
                                 id="standard-adornment-password"
                                 type={values.showPassword ? 'text' : 'password'}
                                 value={values.password}

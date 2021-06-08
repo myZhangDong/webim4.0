@@ -59,6 +59,7 @@ export const updateRoster = (state, { roster }) => {
         friends
     })
 }
+
 /* ------------- Initial State ------------- */
 export const INITIAL_STATE = Immutable({
     byName: null,

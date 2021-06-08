@@ -52,6 +52,9 @@ const useStyles = makeStyles((theme) => {
         submit: {
             margin: theme.spacing(8, 0, 2),
         },
+        input: {
+            color: "rgba(135, 152, 164, 1)"
+        }
     }
 });
 

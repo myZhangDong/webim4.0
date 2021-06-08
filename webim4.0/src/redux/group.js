@@ -99,6 +99,17 @@ const { Types, Creators } = createActions({
         return (dispatch, getState) => {
             WebIM.conn.createGroupNew(options)
         }
+    },
+    joinGroup: (groupId) => {
+        return (dispatch, getState) => {
+            let options = {
+                groupId: groupId,         // 群组ID
+                message: "I want to join"         // 请求信息
+            };
+            WebIM.conn.joinGroup(options).then((res) => {
+                console.log(res)
+            })
+        }
     }
 })
 

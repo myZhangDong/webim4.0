@@ -33,11 +33,12 @@
         "groupBlockSingle": "加入群黑名单",
         "removeSingleGroupMember": "从本群移除",
         "Numbers": "数量",
-        "Name":"姓名",
-        "Personal information":"个人信息",
-        "UserInfo-Save":"保存",
-        "UserInfo-Cancel":"取消",
-        "User-Setting":"设置",
-        "UserSetting-about":"关于"
+        "Name": "姓名",
+        "Personal information": "个人信息",
+        "UserInfo-Save": "保存",
+        "UserInfo-Cancel": "取消",
+        "User-Setting": "设置",
+        "UserSetting-about": "关于",
+        "nickname": "昵称"
     }
 }

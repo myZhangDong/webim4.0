@@ -148,7 +148,7 @@ const useStyles = makeStyles((theme) => {
         },
         'step2-itemBox': {
             display: 'flex',
-            margin: '16px',
+            margin: '12px',
             alignItems: 'center',
             justifyContent: 'space-between',
             '& div': {
@@ -212,6 +212,10 @@ function CreateGroup(props) {
 
     const handleNextClick = () => {
         setStep2open(true)
+    }
+    const handleStep1Close = () => {
+        setCheckedFriend([])
+        onClose()
     }
     function renderContent() {
         return (
@@ -367,7 +371,7 @@ function CreateGroup(props) {
         <>
             <CommonDialog
                 open={open}
-                onClose={onClose}
+                onClose={handleStep1Close}
                 title={i18next.t('Create Group')}
                 content={renderContent()}
                 footer={footer()}
